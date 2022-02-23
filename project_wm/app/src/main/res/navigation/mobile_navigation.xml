@@ -9,7 +9,17 @@
         android:id="@+id/navigation_home"
         android:name="com.frost.project_wm.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_detail"
+            app:destination="@id/navigation_detail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_detail"
+        android:name="com.frost.project_wm.ui.detail.DetailFragment"
+        android:label="@string/detail_product"
+        tools:layout="@layout/fragment_detail" />
 
     <fragment
         android:id="@+id/navigation_admin"
