@@ -58,7 +58,7 @@ class HomeFragment : Fragment() {
 
     private fun handleLiveData(list: List<Product>?) {
         list?.let { adapter.setList(it) }
-            ?:run { Toast.makeText(context, getString(R.string.error_list_products), Toast.LENGTH_LONG).show()}
+            ?:run { Toast.makeText(context, getString(R.string.error_list), Toast.LENGTH_LONG).show()}
     }
 
     override fun onDestroyView() {
