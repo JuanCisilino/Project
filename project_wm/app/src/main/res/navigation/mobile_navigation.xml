@@ -31,7 +31,11 @@
         android:id="@+id/navigation_god"
         android:name="com.frost.project_wm.ui.god.GodFragment"
         android:label="@string/title_god"
-        tools:layout="@layout/fragment_god" />
+        tools:layout="@layout/fragment_god" >
+        <action
+            android:id="@+id/action_navigation_god_to_navigation_detail"
+            app:destination="@id/navigation_detail" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_profile"

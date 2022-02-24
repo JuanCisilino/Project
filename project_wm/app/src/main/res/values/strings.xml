@@ -4,9 +4,11 @@
     <string name="title_admin">Admin</string>
     <string name="title_profile">Profile</string>
     <string name="title_god">G0D</string>
-    <string name="detail_product">detail</string>
+    <string name="detail_product">product</string>
     <string name="detail_user">user</string>
     <string name="error_list">No se pudo conseguir la lista. Intente nuevamente más tarde</string>
+    <string name="error_modify">No se pudo modificar el usuario. Intente nuevamente más tarde</string>
+    <string name="empty_space">Debe ingresar algún dato para continuar</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
