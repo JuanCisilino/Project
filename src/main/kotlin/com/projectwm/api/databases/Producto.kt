@@ -12,7 +12,7 @@ object Producto: Table("productos") {
     val descripcion = varchar("description", 3000)
     val precio = double("cost")
     val stock = integer("stock")
-    val imagen = varchar("image", 3000)
+    val imagen = varchar("image", 300000)
     val empresa = varchar("company", 1000)
     val tipo = varchar("type", 60)
 

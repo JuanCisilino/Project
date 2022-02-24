@@ -38,7 +38,7 @@ class UserServiceImpl {
             DatabaseConnection().connect().use { conn ->
                 conn?.prepareStatement(sql).use { pstmt -> pstmt?.executeUpdate() }
             }
-            ResponseEntity("Usuario modificado", HttpStatus.OK)
+            ResponseEntity(Usuario.getByEmail(user.email), HttpStatus.OK)
         } catch (ex: SQLException) {
             ResponseEntity(user.email, HttpStatus.NOT_MODIFIED)
         }
@@ -53,7 +53,7 @@ class UserServiceImpl {
                 it[empresa] = user.empresa ?: "none"
             }
         }
-        ResponseEntity("Usuario creado", HttpStatus.OK)
+        ResponseEntity(Usuario.getByEmail(user.email), HttpStatus.OK)
     } catch (ex: SQLException){
         ResponseEntity(ex.message, HttpStatus.BAD_REQUEST)
     }

@@ -57,7 +57,7 @@ class ProductServiceImpl {
                 it[precio] = product.cost?: 0.0
             }
         }
-        ResponseEntity("Producto creado", HttpStatus.OK)
+        ResponseEntity(Producto.getById(product.id), HttpStatus.OK)
     } catch (ex: SQLException){
         ResponseEntity(ex.message, HttpStatus.BAD_REQUEST)
     }
@@ -79,7 +79,7 @@ class ProductServiceImpl {
                 DatabaseConnection().connect().use { conn ->
                     conn?.prepareStatement(sql).use { pstmt -> pstmt?.executeUpdate() }
                 }
-                ResponseEntity("Producto modificado", HttpStatus.OK)
+                ResponseEntity(Producto.getById(product.id), HttpStatus.OK)
             } catch (ex: SQLException) {
                 ResponseEntity(product.title, HttpStatus.NOT_MODIFIED)
             }
