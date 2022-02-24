@@ -1,13 +1,21 @@
 package com.frost.project_wm.ui.profile
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.frost.project_wm.UserPrefs
+import com.frost.project_wm.model.User
 
 class ProfileViewModel: ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is Profile Fragment"
-    }
-    val text: LiveData<String> = _text
+   lateinit var userPrefs: UserPrefs
+   lateinit var user: User
+
+   fun setUserPrefs(context: Context) {
+       userPrefs = UserPrefs(context)
+   }
+
+    fun getData(data: String) = userPrefs.getString(data)
+
 }

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">White Mark</string>
+    <string name="version_app">Version: 1.0</string>
     <string name="title_home">Home</string>
     <string name="title_admin">Admin</string>
     <string name="title_profile">Profile</string>
@@ -10,6 +11,10 @@
     <string name="error_list">No se pudo conseguir la lista. Intente nuevamente más tarde</string>
     <string name="error_modify">No se pudo modificar el usuario. Intente nuevamente más tarde</string>
     <string name="empty_space">Debe ingresar algún dato para continuar</string>
+    <string name="shared_pref_name">Debe ingresar algún dato para continuar</string>
+    <string name="shared_pref_email">Debe ingresar algún dato para continuar</string>
+    <string name="shared_pref_role">Debe ingresar algún dato para continuar</string>
+    <string name="shared_pref_company">Debe ingresar algún dato para continuar</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

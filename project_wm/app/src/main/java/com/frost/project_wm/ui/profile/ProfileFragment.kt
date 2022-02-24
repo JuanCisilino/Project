@@ -12,33 +12,33 @@ import com.frost.project_wm.R
 import com.frost.project_wm.databinding.FragmentGodBinding
 import com.frost.project_wm.databinding.FragmentProfileBinding
 import com.frost.project_wm.ui.god.GodViewModel
+import com.frost.project_wm.ui.home.HomeViewModel
 
 
 class ProfileFragment : Fragment() {
 
-    private lateinit var viewModel: ProfileViewModel
+    private val viewModel by lazy { ViewModelProvider(this)[ProfileViewModel::class.java] }
     private var _binding: FragmentProfileBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        viewModel =
-            ViewModelProvider(this).get(ProfileViewModel::class.java)
-
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        return binding.root
+    }
 
-        val textView: TextView = binding.textProfile
-        viewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-        return root
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        context?.let { viewModel.setUserPrefs(it) }
+        initMembers()
+    }
+
+    private fun initMembers() {
+        binding.textName.text = viewModel.getData(getString(R.string.shared_pref_name))
+        binding.textEmail.text = viewModel.getData(getString(R.string.shared_pref_email))
+        binding.textCompany.text = viewModel.getData(getString(R.string.shared_pref_company))
+        binding.textVersion.text = getString(R.string.version_app)
     }
 
     override fun onDestroyView() {
