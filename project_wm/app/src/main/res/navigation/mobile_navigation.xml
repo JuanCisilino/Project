@@ -18,7 +18,7 @@
     <fragment
         android:id="@+id/navigation_detail"
         android:name="com.frost.project_wm.ui.detail.DetailFragment"
-        android:label="@string/detail_product"
+        android:label="@string/title_detail"
         tools:layout="@layout/fragment_detail" />
 
     <fragment

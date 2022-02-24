@@ -4,6 +4,7 @@
     <string name="title_admin">Admin</string>
     <string name="title_profile">Profile</string>
     <string name="title_god">G0D</string>
+    <string name="title_detail">Detail</string>
     <string name="detail_product">product</string>
     <string name="detail_user">user</string>
     <string name="error_list">No se pudo conseguir la lista. Intente nuevamente más tarde</string>

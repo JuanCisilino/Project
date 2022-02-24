@@ -5,14 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import com.frost.project_wm.databinding.FragmentDetailBinding
-import com.frost.project_wm.ui.adapters.ProductsAdapter
-import android.view.MenuItem
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import com.frost.project_wm.R
 import com.frost.project_wm.model.Product
 import com.frost.project_wm.model.User
@@ -51,7 +48,16 @@ class DetailFragment : Fragment() {
     }
 
     private fun showProductData(product: Product) {
-        binding.textDetail.text = product.title
+        binding.userLayout.visibility = View.GONE
+        binding.textLabel.hint = product.title
+        binding.textDescription.hint = product.description
+        binding.textAvailable.hint = "Stock: ${product.stock}"
+        binding.textCost.hint = "$ ${product.cost}"
+        binding.btnProduct.setOnClickListener { validateAndChangeProduct() }
+    }
+
+    private fun validateAndChangeProduct() {
+        Toast.makeText(context, "Not yet implemented", Toast.LENGTH_SHORT).show()
     }
 
     private fun subscribeToLiveData() {
@@ -64,11 +70,15 @@ class DetailFragment : Fragment() {
     }
 
     private fun showUserData(user: User) {
-        binding.textDetail.text = user.rol
-        binding.btn.setOnClickListener { validateAndChange() }
+        binding.productLayout.visibility = View.GONE
+        binding.textName.text = user.nombre
+        binding.textEmail.text = user.email
+        binding.textCompany.text = user.empresa
+        binding.textRole.text = user.rol
+        binding.btn.setOnClickListener { validateAndChangeUser() }
     }
 
-    private fun validateAndChange() {
+    private fun validateAndChangeUser() {
         val newRole = binding.editText.text?.trim()?:""
         if (newRole.isNotBlank()) viewModel.changeRole(newRole.toString())
         else Toast.makeText(context, R.string.empty_space, Toast.LENGTH_SHORT).show()
