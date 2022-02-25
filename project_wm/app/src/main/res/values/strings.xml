@@ -12,10 +12,13 @@
     <string name="error_list">No se pudo conseguir la lista. Intente nuevamente más tarde</string>
     <string name="error_modify">No se pudo modificar el usuario. Intente nuevamente más tarde</string>
     <string name="empty_space">Debe ingresar algún dato para continuar</string>
+    <string name="prefs_file">com.frost.project_wm.PREFERENCE_FILE_KEY</string>
     <string name="shared_pref_name">Nombre</string>
     <string name="shared_pref_email">Email</string>
     <string name="shared_pref_role">Rol</string>
     <string name="shared_pref_company">Empresa</string>
+    <string name="error_message">Se ha producido un error autenticando al usuario</string>
+    <string name="error">Error</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

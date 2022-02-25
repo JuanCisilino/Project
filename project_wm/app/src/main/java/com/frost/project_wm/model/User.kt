@@ -12,5 +12,5 @@ data class User(
 ): Parcelable{}
 
 data class UserBody(
-    val body: User
+    val body: User?
 )

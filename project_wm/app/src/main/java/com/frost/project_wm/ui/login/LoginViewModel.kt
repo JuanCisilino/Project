@@ -1,7 +1,10 @@
 package com.frost.project_wm.ui.login
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.frost.project_wm.R
+import com.frost.project_wm.UserPrefs
 import com.frost.project_wm.model.User
 import com.frost.project_wm.network.RepoInstance
 import com.frost.project_wm.network.Repository
@@ -11,6 +14,23 @@ class LoginViewModel: ViewModel() {
 
     private val instance = RepoInstance.getRetrofitInstance().create(Repository::class.java)
     var userLiveData = MutableLiveData<User?>()
+    var user : User ?= null
+    lateinit var userPrefs: UserPrefs
+    lateinit var contextApp: Context
+
+    fun setUserPrefs(context: Context) {
+        contextApp = context
+        userPrefs = UserPrefs(context)
+    }
+
+    fun getData(data: String) = userPrefs.getString(data)
+
+    fun save(user: User) {
+        userPrefs.save(contextApp.getString(R.string.shared_pref_email), user.email)
+        userPrefs.save(contextApp.getString(R.string.shared_pref_name), user.nombre)
+        userPrefs.save(contextApp.getString(R.string.shared_pref_role), user.rol)
+        userPrefs.save(contextApp.getString(R.string.shared_pref_company), user.empresa)
+    }
 
     fun saveUser(user: User) =
         instance.createUser(user)
@@ -25,6 +45,27 @@ class LoginViewModel: ViewModel() {
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
             .subscribe(
-                {userLiveData.postValue(it.body)},
+                {
+                    user = it.body
+                    it.body?.let { user -> save(user) }
+                },
                 {userLiveData.postValue(null)})
+
+    fun godLogin() =
+        instance.getByEmail("testing@test.com")
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .subscribe(
+                {it.body?.let { userLiveData.postValue(it) }
+                    ?:run {userLiveData.postValue(null)}},
+                {})
+
+    fun sessionLogin(email: String) =
+        instance.getByEmail(email)
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .subscribe(
+                {it.body?.let { userLiveData.postValue(it) }
+                    ?:run {userLiveData.postValue(null)}},
+                {})
 }

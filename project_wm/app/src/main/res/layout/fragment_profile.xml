@@ -70,6 +70,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_email" />
 
+        <Button
+            android:id="@+id/logOut_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cerrar Sesión"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/text_version"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <TextView
             android:id="@+id/text_version"
             android:layout_width="match_parent"

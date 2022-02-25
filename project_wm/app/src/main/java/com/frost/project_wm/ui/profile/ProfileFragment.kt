@@ -1,5 +1,7 @@
 package com.frost.project_wm.ui.profile
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,8 +13,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.frost.project_wm.R
 import com.frost.project_wm.databinding.FragmentGodBinding
 import com.frost.project_wm.databinding.FragmentProfileBinding
+import com.frost.project_wm.logOut
 import com.frost.project_wm.ui.god.GodViewModel
 import com.frost.project_wm.ui.home.HomeViewModel
+import com.frost.project_wm.ui.login.LoginActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 
 class ProfileFragment : Fragment() {
 
@@ -40,6 +45,17 @@ class ProfileFragment : Fragment() {
         if (role == "admin") binding.textCompany.text = viewModel.getData(getString(R.string.shared_pref_company))
         else binding.textCompany.visibility = View.GONE
         binding.textVersion.text = getString(R.string.version_app)
+        binding.logOutBtn.setOnClickListener { logOut() }
+    }
+
+    private fun logOut() {
+        clearData()
+        requireActivity().logOut()
+        LoginActivity.start(requireActivity())
+    }
+
+    private fun clearData(){
+        viewModel.userPrefs.clear()
     }
 
     override fun onDestroyView() {

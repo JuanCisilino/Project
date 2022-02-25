@@ -5,11 +5,8 @@ import android.content.SharedPreferences
 
 class UserPrefs(val context: Context) {
 
-    companion object{
-        const val sharedPreferencesFile = "user"
-    }
     private val userSharedPref: SharedPreferences
-    by lazy { context.getSharedPreferences(sharedPreferencesFile, Context.MODE_PRIVATE) }
+    by lazy { context.getSharedPreferences(context.getString(R.string.shared_pref_name), Context.MODE_PRIVATE) }
 
     /**
      * Convenient method to check if a preference exists or not. <br/>
@@ -29,6 +26,12 @@ class UserPrefs(val context: Context) {
     fun remove(keyName: String) {
         val editor: SharedPreferences.Editor = userSharedPref.edit()
         editor.remove(keyName)
+        editor.apply()
+    }
+
+    fun clear(){
+        val editor: SharedPreferences.Editor = userSharedPref.edit()
+        editor.clear()
         editor.apply()
     }
 

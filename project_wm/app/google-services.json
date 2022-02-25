@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1077617626551",
+    "project_id": "project-wm-abf08",
+    "storage_bucket": "project-wm-abf08.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1077617626551:android:917111d3664b0e9dc72c32",
+        "android_client_info": {
+          "package_name": "com.frost.project_wm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1077617626551-3p8ji2oh76bomnkg91a56b7ve67o6vhh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASTGINAqo9j7T5-QCvUSJqh-vZZ9Oms94"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1077617626551-3p8ji2oh76bomnkg91a56b7ve67o6vhh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
