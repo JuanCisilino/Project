@@ -9,4 +9,8 @@ data class User(
     val nombre: String,
     val rol: String,
     val empresa: String
-): Parcelable
+): Parcelable{}
+
+data class UserBody(
+    val body: User
+)

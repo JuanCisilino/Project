@@ -14,7 +14,6 @@ import com.frost.project_wm.databinding.FragmentProfileBinding
 import com.frost.project_wm.ui.god.GodViewModel
 import com.frost.project_wm.ui.home.HomeViewModel
 
-
 class ProfileFragment : Fragment() {
 
     private val viewModel by lazy { ViewModelProvider(this)[ProfileViewModel::class.java] }
@@ -35,9 +34,11 @@ class ProfileFragment : Fragment() {
     }
 
     private fun initMembers() {
+        val role = viewModel.getData(getString(R.string.shared_pref_role))
         binding.textName.text = viewModel.getData(getString(R.string.shared_pref_name))
         binding.textEmail.text = viewModel.getData(getString(R.string.shared_pref_email))
-        binding.textCompany.text = viewModel.getData(getString(R.string.shared_pref_company))
+        if (role == "admin") binding.textCompany.text = viewModel.getData(getString(R.string.shared_pref_company))
+        else binding.textCompany.visibility = View.GONE
         binding.textVersion.text = getString(R.string.version_app)
     }
 
