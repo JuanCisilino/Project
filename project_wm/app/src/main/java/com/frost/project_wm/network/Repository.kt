@@ -1,9 +1,6 @@
 package com.frost.project_wm.network
 
-import com.frost.project_wm.model.Product
-import com.frost.project_wm.model.User
-import com.frost.project_wm.model.UserBody
-import com.frost.project_wm.model.UserUpdateRequest
+import com.frost.project_wm.model.*
 import retrofit2.http.*
 import rx.Observable
 
@@ -23,4 +20,7 @@ interface Repository {
 
     @POST("users")
     fun createUser(@Body user: User): Observable<User>
+
+    @GET("prodById/{id}")
+    fun getProdById(@Path("id") id: Int): Observable<ProductBody>
 }

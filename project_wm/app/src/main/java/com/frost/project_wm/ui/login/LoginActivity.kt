@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.frost.project_wm.*
 import com.frost.project_wm.databinding.ActivityLoginBinding
 import com.frost.project_wm.model.User
+import com.frost.project_wm.ui.dialog.LoadingDialog
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -25,6 +26,7 @@ class LoginActivity : AppCompatActivity() {
     private val viewModel by lazy { ViewModelProvider(this)[LoginViewModel::class.java] }
     private lateinit var binding: ActivityLoginBinding
     private val GOOGLE_SIGN_IN = 100
+    private val loadingDialog = LoadingDialog(R.string.loading_message)
 
     companion object{
         fun start(activity: Activity){
@@ -45,8 +47,10 @@ class LoginActivity : AppCompatActivity() {
 
     private fun handleUser(user: User?) {
         user?.let {
+            loadingDialog.dismiss()
             viewModel.save(it)
             MainActivity.start(this)
+            finish()
         }
             ?:run {
                 Toast.makeText(this, getString(R.string.error_message), Toast.LENGTH_SHORT).show() }
@@ -54,11 +58,16 @@ class LoginActivity : AppCompatActivity() {
 
     private fun checkSession() {
         val email = viewModel.getData(getString(R.string.shared_pref_email))
-        email?.let { if (it.isNotBlank()) viewModel.sessionLogin(it) }
+        email?.let { if (it.isNotBlank()) {
+            loadingDialog.show(supportFragmentManager)
+            viewModel.sessionLogin(it)
+        } }
     }
 
     private fun setBtns() {
-        binding.btn.setOnClickListener { viewModel.godLogin() }
+        binding.btn.setOnClickListener {
+            loadingDialog.show(supportFragmentManager)
+            viewModel.godLogin() }
         binding.googleButton.setOnClickListener { startGoogle() }
     }
 
@@ -110,8 +119,9 @@ class LoginActivity : AppCompatActivity() {
             email = account.email?:"",
             nombre = account.displayName?:"none",
             rol = "user",
-            empresa = "unknown"
+            empresa = "WM"
         )
+        loadingDialog.show(supportFragmentManager)
         viewModel.user?.let { handleUser(it) }
             ?:run { viewModel.saveUser(newUser) }
 

@@ -1,28 +1,26 @@
 package com.frost.project_wm.ui.profile
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.lifecycle.Observer
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.frost.project_wm.R
-import com.frost.project_wm.databinding.FragmentGodBinding
 import com.frost.project_wm.databinding.FragmentProfileBinding
 import com.frost.project_wm.logOut
-import com.frost.project_wm.ui.god.GodViewModel
-import com.frost.project_wm.ui.home.HomeViewModel
+import com.frost.project_wm.model.User
+import com.frost.project_wm.ui.adapters.UsersAdapter
 import com.frost.project_wm.ui.login.LoginActivity
-import com.google.android.gms.auth.api.signin.GoogleSignIn
 
 class ProfileFragment : Fragment() {
 
     private val viewModel by lazy { ViewModelProvider(this)[ProfileViewModel::class.java] }
     private var _binding: FragmentProfileBinding? = null
+    private lateinit var adapter : UsersAdapter
 
     private val binding get() = _binding!!
 
@@ -36,16 +34,67 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         context?.let { viewModel.setUserPrefs(it) }
         initMembers()
+        setupRecycler()
+        subscribeToLiveData()
+    }
+
+    private fun setupRecycler() {
+        binding.recycler.layoutManager = GridLayoutManager(context, 3)
+        binding.recycler.adapter = adapter
+    }
+
+    private fun subscribeToLiveData() {
+        viewModel.userList.observe(viewLifecycleOwner, { handleLiveData(it) })
+    }
+
+    private fun handleLiveData(list: List<User>?) {
+        list?.let { adapter.setList(it) }
+            ?:run { Toast.makeText(context, getString(R.string.error_list), Toast.LENGTH_LONG).show()}
     }
 
     private fun initMembers() {
-        val role = viewModel.getData(getString(R.string.shared_pref_role))
+        setComponents()
+        adapter = UsersAdapter()
+        adapter.onUserClickCallback = { navigateToDetail(it) }
+        binding.logOutBtn.setOnClickListener { logOut() }
+    }
+
+    private fun navigateToDetail(user: User) {
+        val bundle = Bundle()
+        bundle.putParcelable(getString(R.string.detail_user), user)
+        findNavController().navigate(R.id.navigation_detail, bundle)
+    }
+
+    private fun setComponents() {
+        when (viewModel.getData(getString(R.string.shared_pref_role))){
+            getString(R.string.detail_admin) -> showAdminLayout()
+            getString(R.string.detail_g0d) -> showGodLayout()
+            else -> showUserLayout()
+        }
+    }
+
+    private fun showUserLayout() {
+        binding.textCompany.visibility = View.GONE
+        setData()
+    }
+
+    private fun setData() {
+        binding.godLayout.visibility = View.GONE
         binding.textName.text = viewModel.getData(getString(R.string.shared_pref_name))
         binding.textEmail.text = viewModel.getData(getString(R.string.shared_pref_email))
-        if (role == "admin") binding.textCompany.text = viewModel.getData(getString(R.string.shared_pref_company))
-        else binding.textCompany.visibility = View.GONE
         binding.textVersion.text = getString(R.string.version_app)
-        binding.logOutBtn.setOnClickListener { logOut() }
+    }
+
+    private fun showGodLayout() {
+        binding.userLayout.visibility = View.GONE
+        binding.ivImage.setImageResource(R.drawable.horus)
+        viewModel.getList()
+        binding.ivImage.setOnClickListener { logOut() }
+    }
+
+    private fun showAdminLayout() {
+        binding.textCompany.text = viewModel.getData(getString(R.string.shared_pref_company))
+        setData()
     }
 
     private fun logOut() {

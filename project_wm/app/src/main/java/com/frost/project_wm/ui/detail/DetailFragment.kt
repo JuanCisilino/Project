@@ -11,6 +11,7 @@ import com.frost.project_wm.databinding.FragmentDetailBinding
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.frost.project_wm.R
+import com.frost.project_wm.UserPrefs
 import com.frost.project_wm.model.Product
 import com.frost.project_wm.model.User
 
@@ -49,15 +50,14 @@ class DetailFragment : Fragment() {
 
     private fun showProductData(product: Product) {
         binding.userLayout.visibility = View.GONE
-        binding.textLabel.hint = product.title
-        binding.textDescription.hint = product.description
-        binding.textAvailable.hint = "Stock: ${product.stock}"
-        binding.textCost.hint = "$ ${product.cost}"
-        binding.btnProduct.setOnClickListener { validateAndChangeProduct() }
-    }
 
-    private fun validateAndChangeProduct() {
-        Toast.makeText(context, "Not yet implemented", Toast.LENGTH_SHORT).show()
+        val role = UserPrefs(requireContext()).getString(getString(R.string.shared_pref_role))
+        if ( role == "admin") binding.textLabel.text = "ID: ${product.id} ${product.title}"
+        else binding.textLabel.text = product.title
+
+        binding.textDescription.text = product.description
+        binding.textAvailable.text = "Stock: ${product.stock}"
+        binding.textCost.text = "$ ${product.cost}"
     }
 
     private fun subscribeToLiveData() {

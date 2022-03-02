@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
+    lateinit var userPrefs: UserPrefs
 
     companion object{
         fun start(context: Context){
@@ -32,23 +33,30 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setBinding(){
+        userPrefs = UserPrefs(this)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
 
     private fun setNavigation(){
         val navView: BottomNavigationView = binding.navView
+        setNaviViewConfiguration(navView)
         navController = findNavController(R.id.nav_host_fragment_activity_main)
         appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.navigation_home, R.id.navigation_admin,
-                R.id.navigation_god, R.id.navigation_profile))
+            setOf(R.id.navigation_home, R.id.navigation_admin, R.id.navigation_profile))
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
 
+    private fun setNaviViewConfiguration(navView: BottomNavigationView){
+        when (userPrefs.getString(getString(R.string.shared_pref_role))){
+            "g0d" -> { }
+            "admin" -> { }
+            else -> { navView.menu.findItem(R.id.navigation_admin).isVisible = false }
+        }
+    }
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp(appBarConfiguration)
     }
 
-    override fun onBackPressed() { }
 }

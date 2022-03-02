@@ -136,7 +136,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_image" />
 
-        <androidx.appcompat.widget.AppCompatEditText
+        <TextView
             android:id="@+id/text_available"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -150,7 +150,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_description" />
 
-        <androidx.appcompat.widget.AppCompatEditText
+        <TextView
             android:id="@+id/text_cost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -164,11 +164,10 @@
             app:layout_constraintTop_toBottomOf="@+id/text_label" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_product"
+            android:id="@+id/btn_purchase"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Add one"
+            android:text="Lo quiero!"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_available"/>

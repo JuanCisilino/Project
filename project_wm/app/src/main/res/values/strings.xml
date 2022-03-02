@@ -3,12 +3,16 @@
     <string name="version_app">Version: 1.0</string>
     <string name="title_home">Home</string>
     <string name="title_admin">Admin</string>
+    <string name="title_add">Add</string>
+    <string name="title_edit">Edit</string>
     <string name="title_profile">Profile</string>
     <string name="title_god">G0D</string>
     <string name="title_login">Login</string>
     <string name="title_detail">Detail</string>
     <string name="detail_product">product</string>
     <string name="detail_user">user</string>
+    <string name="detail_admin">admin</string>
+    <string name="detail_g0d">g0d</string>
     <string name="error_list">No se pudo conseguir la lista. Intente nuevamente más tarde</string>
     <string name="error_modify">No se pudo modificar el usuario. Intente nuevamente más tarde</string>
     <string name="empty_space">Debe ingresar algún dato para continuar</string>
@@ -17,7 +21,9 @@
     <string name="shared_pref_email">Email</string>
     <string name="shared_pref_role">Rol</string>
     <string name="shared_pref_company">Empresa</string>
+    <string name="loading_message">Cargando...</string>
     <string name="error_message">Se ha producido un error autenticando al usuario</string>
+    <string name="error_message_product">Se ha producido un error buscando al producto</string>
     <string name="error">Error</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

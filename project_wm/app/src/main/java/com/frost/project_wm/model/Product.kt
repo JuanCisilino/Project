@@ -13,4 +13,8 @@ data class Product(
     val image: String,
     val company: String,
     val type: String
-): Parcelable
+): Parcelable {}
+
+data class ProductBody(
+    val body: Product?
+)
