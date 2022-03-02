@@ -115,13 +115,13 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun validateAndContinue(account: GoogleSignInAccount) {
+        loadingDialog.show(supportFragmentManager)
         val newUser = User(
             email = account.email?:"",
             nombre = account.displayName?:"none",
             rol = "user",
             empresa = "WM"
         )
-        loadingDialog.show(supportFragmentManager)
         viewModel.user?.let { handleUser(it) }
             ?:run { viewModel.saveUser(newUser) }
 

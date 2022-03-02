@@ -7,12 +7,12 @@ import com.frost.project_wm.R
 import com.frost.project_wm.UserPrefs
 import com.frost.project_wm.model.User
 import com.frost.project_wm.network.RepoInstance
-import com.frost.project_wm.network.Repository
+import com.frost.project_wm.network.UserRepository
 import rx.schedulers.Schedulers
 
 class LoginViewModel: ViewModel() {
 
-    private val instance = RepoInstance.getRetrofitInstance().create(Repository::class.java)
+    private val instance = RepoInstance.getRetrofitInstance().create(UserRepository::class.java)
     var userLiveData = MutableLiveData<User?>()
     var user : User ?= null
     lateinit var userPrefs: UserPrefs

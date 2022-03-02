@@ -63,6 +63,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:textAlignment="center"
+            android:inputType="number"
             android:hint="Ingrese Stock disponible"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -77,6 +78,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="40dp"
+            android:inputType="numberDecimal"
             android:textAlignment="center"
             android:hint="Ingrese Costo"
             android:textSize="20sp"
@@ -84,14 +86,24 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editText_label" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/btn_pic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginTop="20dp"
-            android:text="Selecciona una imagen"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:src="@drawable/ic_baseline_photo_camera_24"
+            app:layout_constraintEnd_toStartOf="@+id/btn_gallery"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editText_available"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btn_gallery"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/ic_baseline_image_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btn_pic"
             app:layout_constraintTop_toBottomOf="@+id/editText_available"/>
 
         <androidx.appcompat.widget.AppCompatButton

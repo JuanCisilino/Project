@@ -1,5 +1,6 @@
 package com.frost.project_wm.ui.adapters
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,14 +35,11 @@ class ProductsAdapter: RecyclerView.Adapter<ProductsAdapter.MyViewHolder>() {
             view.descriptionLabel.text = product.description
             view.availableLabel.text = "Stock: ${product.stock}"
             view.costLabel.text = "$ ${product.cost}"
+            if (product.image != ""){
+                val uri: Uri = Uri.parse(product.image)
+                view.iv_image.setImageURI(uri)
+            }
             view.setOnClickListener { onProductClickCallback?.invoke(product) }
-        }
-
-        private fun glideImage(imageView: ImageView, url: String){
-            Glide.with(imageView)
-                .load(url)
-                .circleCrop()
-                .into(imageView)
         }
     }
 
