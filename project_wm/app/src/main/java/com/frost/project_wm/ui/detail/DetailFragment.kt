@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.frost.project_wm.databinding.FragmentDetailBinding
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import com.frost.project_wm.Base64Helper
 import com.frost.project_wm.R
 import com.frost.project_wm.UserPrefs
 import com.frost.project_wm.model.Product
@@ -19,7 +20,7 @@ class DetailFragment : Fragment() {
 
     private val viewModel by lazy { ViewModelProvider(this)[DetailViewModel::class.java] }
     private var _binding: FragmentDetailBinding? = null
-
+    private lateinit var helper: Base64Helper
     private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +34,7 @@ class DetailFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         _binding = FragmentDetailBinding.inflate(inflater, container, false)
+        context?.let { helper = Base64Helper(it) }
         return binding.root
     }
 
@@ -58,6 +60,7 @@ class DetailFragment : Fragment() {
         binding.textDescription.text = product.description
         binding.textAvailable.text = "Stock: ${product.stock}"
         binding.textCost.text = "$ ${product.cost}"
+        binding.ivImage.setImageBitmap(helper.decode(product.image))
     }
 
     private fun subscribeToLiveData() {

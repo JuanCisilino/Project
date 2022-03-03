@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.frost.project_wm.Base64Helper
 import com.frost.project_wm.R
 import com.frost.project_wm.databinding.FragmentAddeditBinding
 import com.frost.project_wm.model.Product
@@ -23,6 +25,7 @@ class AddEditFragment : Fragment() {
     private var _binding: FragmentAddeditBinding? = null
     private val loadingDialog = LoadingDialog(R.string.loading_message)
     private val binding get() = _binding!!
+    private lateinit var helper: Base64Helper
 
     private fun getLabel(){
         requireArguments().let {
@@ -42,6 +45,7 @@ class AddEditFragment : Fragment() {
         savedInstanceState: Bundle?): View {
         getLabel()
         _binding = FragmentAddeditBinding.inflate(inflater, container, false)
+        context?.let { helper = Base64Helper(it) }
         return binding.root
     }
 
@@ -81,8 +85,7 @@ class AddEditFragment : Fragment() {
         binding.editTextDescription.hint = product.description
         binding.editTextAvailable.hint = product.stock.toString()
         binding.editTextCost.hint = product.cost.toString()
-        val uri: Uri = Uri.parse(product.image)
-        binding.ivAddimage.setImageURI(uri)
+        if (product.image != "") binding.ivAddimage.setImageBitmap(helper?.decode(product.image))
     }
 
     private fun setGalleryButton() {
@@ -129,6 +132,7 @@ class AddEditFragment : Fragment() {
             image = viewModel.imageString?:""
         )
         viewModel.saveProduct(newProduct)
+        Log.d(newProduct.title, newProduct.image.length.toString())
         loadingDialog.show(parentFragmentManager)
     }
 
@@ -136,11 +140,13 @@ class AddEditFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         when(requestCode){
             100 -> {
-                viewModel.imageString = data?.extras?.get("data") as String
-                binding.ivAddimage.setImageBitmap(data.extras?.get("data") as Bitmap) }
+                val bitmap = data?.extras?.get("data") as Bitmap
+                viewModel.imageString = helper.enconde(bitmap)
+                binding.ivAddimage.setImageBitmap(bitmap) }
             120 -> {
-                viewModel.imageString = data?.data.toString()
-                binding.ivAddimage.setImageURI(data?.data) }
+                val bitmap = helper.uriToBitmap(data?.data!!)
+                viewModel.imageString = bitmap?.let { helper.enconde(it) }
+                binding.ivAddimage.setImageURI(data.data) }
         }
     }
 
