@@ -3,8 +3,10 @@ package com.projectwm.api.services
 import com.projectwm.api.databases.DatabaseConnection
 import com.projectwm.api.responses.PagingResponse
 import com.projectwm.api.databases.Producto
+import com.projectwm.api.databases.Producto.id
 import com.projectwm.api.models.ProductoLocal
 import com.projectwm.api.requests.ProductRequest
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.http.HttpStatus
@@ -45,19 +47,9 @@ class ProductServiceImpl {
     }
 
     fun createProduct(product: ProductoLocal) = try {
-        transaction {
-            Producto.insert {
-                it[id] = product.id
-                it[titulo] = product.title ?: "none"
-                it[descripcion] = product.description ?: "none"
-                it[empresa] = product.company ?: "none"
-                it[stock] = product.stock
-                it[tipo] = product.type ?: "none"
-                it[imagen] = product.image ?: "none"
-                it[precio] = product.cost?: 0.0
-            }
-        }
-        ResponseEntity(Producto.getById(product.id), HttpStatus.OK)
+        val randomId = getRandomId()
+        transaction { generateProduct(randomId, product) }
+        ResponseEntity(Producto.getById(randomId), HttpStatus.OK)
     } catch (ex: SQLException){
         ResponseEntity(ex.message, HttpStatus.BAD_REQUEST)
     }
@@ -72,28 +64,42 @@ class ProductServiceImpl {
         ResponseEntity(ex.message, HttpStatus.BAD_REQUEST)
     }
 
-    fun updateProduct(product: ProductRequest): ResponseEntity<Any> {
-        getString(product)?.let {
-            val sql = it
-            return try {
-                DatabaseConnection().connect().use { conn ->
-                    conn?.prepareStatement(sql).use { pstmt -> pstmt?.executeUpdate() }
-                }
-                ResponseEntity(Producto.getById(product.id), HttpStatus.OK)
-            } catch (ex: SQLException) {
-                ResponseEntity(product.title, HttpStatus.NOT_MODIFIED)
-            }
+    fun updateProduct(product: ProductoLocal): ResponseEntity<Any> {
+        val sql = "DELETE FROM productos WHERE id = '${product.id}'"
+        DatabaseConnection().connect().use { conn ->
+            conn?.prepareStatement(sql).use { pstmt -> pstmt?.executeUpdate() }
         }
-            ?:run { return ResponseEntity(product.title, HttpStatus.NOT_MODIFIED) }
+        return try {
+            transaction { generateProduct(product.id, product) }
+            ResponseEntity(Producto.getById(product.id), HttpStatus.OK)
+        } catch (ex: SQLException) {
+            ResponseEntity(product.title, HttpStatus.NOT_MODIFIED)
+        }
     }
 
-    private fun getString(product: ProductRequest): String? {
-        product.title?.let { return "UPDATE productos SET title = '${it}' WHERE id = '${product.id}'" }
-        product.description?.let { return "UPDATE productos SET description = '${it}' WHERE id = '${product.id}'" }
-        product.cost?.let { return "UPDATE productos SET cost = '${it}' WHERE id = '${product.id}'" }
-        product.image?.let { return "UPDATE productos SET image = '${it}' WHERE id = '${product.id}'" }
-        product.stock?.let { return "UPDATE productos SET stock = '${it}' WHERE id = '${product.id}'" }
-        product.type?.let { return "UPDATE productos SET type = '${it}' WHERE id = '${product.id}'" }
-        return null
+    private fun generateProduct(id: Int, product: ProductoLocal){
+        Producto.insert {
+            it[Producto.id] = id
+            it[titulo] = product.title ?: "none"
+            it[descripcion] = product.description ?: "none"
+            it[empresa] = product.company ?: "none"
+            it[stock] = product.stock
+            it[tipo] = product.type ?: "none"
+            it[imagen] = product.image ?: "none"
+            it[activo] = product.isActive
+            it[precio] = product.cost?: 0.0
+        }
+    }
+
+    private fun getRandomId(): Int {
+        val randomId = generateId()
+        val existingUser = Producto.getById(randomId)
+        existingUser?.let { getRandomId() }
+        return randomId
+    }
+
+    private fun generateId(): Int {
+        require(1 <= 9999) { "0" }
+        return (1..9999).random()
     }
 }

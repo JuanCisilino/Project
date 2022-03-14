@@ -63,7 +63,7 @@ class Controller {
     suspend fun getAllProducts() = productService.getAllProducts()
 
     @PatchMapping("/products")
-    suspend fun updateProd(@RequestBody @Valid product: ProductRequest) =
+    suspend fun updateProd(@RequestBody @Valid product: ProductoLocal) =
         productService.updateProduct(product)
 
     @PostMapping("/products")
