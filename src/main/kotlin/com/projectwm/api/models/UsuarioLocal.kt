@@ -7,5 +7,6 @@ data class UsuarioLocal(
     val email : String,
     val nombre : String?,
     val rol : String?,
+    val cart: String?,
     val empresa : String?){
 }

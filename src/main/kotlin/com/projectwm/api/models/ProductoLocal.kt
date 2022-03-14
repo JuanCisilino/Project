@@ -9,6 +9,7 @@ data class ProductoLocal(
     val stock : Int,
     val image : String?,
     val company : String?,
+    val isActive: Boolean,
     val type : String?
 ){
 

@@ -12,8 +12,9 @@ object Producto: Table("productos") {
     val descripcion = varchar("description", 3000)
     val precio = double("cost")
     val stock = integer("stock")
-    val imagen = varchar("image", 300000)
+    val imagen = varchar("image", 3000000)
     val empresa = varchar("company", 1000)
+    val activo = bool("is_active")
     val tipo = varchar("type", 60)
 
     fun getAll(): List<ProductoLocal> = transaction { Producto.selectAll().map { convertToProducto(it) }.sortedBy { it.id } }
@@ -27,6 +28,7 @@ object Producto: Table("productos") {
             stock = row?.get(stock)?:0,
             image = row?.get(imagen),
             company = row?.get(empresa),
+            isActive = row?.get(activo)?:false,
             type = row?.get(tipo)
         )
     }

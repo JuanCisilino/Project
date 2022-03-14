@@ -10,6 +10,7 @@ object Usuario: Table(name = "usuarios") {
     val email = varchar("email", 100)
     val nombre = varchar("nombre", 60)
     val rol = varchar("rol", 30)
+    val carrito = varchar("cart", 30000)
     val empresa = varchar("empresa", 100)
 
     fun getAll(): List<UsuarioLocal> = transaction { Usuario.selectAll().map { convertToUsuario(it) }.sortedBy { it.rol } }
@@ -19,6 +20,7 @@ object Usuario: Table(name = "usuarios") {
             email = row?.get(email)?:"undefined",
             nombre = row?.get(nombre),
             rol = row?.get(rol),
+            cart = row?.get(carrito),
             empresa = row?.get(empresa)
         )
     }
