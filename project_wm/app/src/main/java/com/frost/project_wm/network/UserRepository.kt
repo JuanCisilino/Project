@@ -2,6 +2,7 @@ package com.frost.project_wm.network
 
 import com.frost.project_wm.model.*
 import retrofit2.http.*
+import rx.Completable
 import rx.Observable
 
 interface UserRepository {
@@ -11,6 +12,9 @@ interface UserRepository {
 
     @PATCH("users")
     fun modifyRole(@Body userUpdate: UserUpdateRequest): Observable<User>
+
+    @DELETE("users/{email}")
+    fun removeUser(@Path("email") email: String): Completable
 
     @GET("users/{email}")
     fun getByEmail(@Path("email") email: String): Observable<UserBody>
