@@ -85,7 +85,7 @@ class ProductServiceImpl {
             it[empresa] = product.company ?: "none"
             it[stock] = product.stock
             it[tipo] = product.type ?: "none"
-            it[imagen] = product.image ?: "none"
+            it[imagen] = product.image ?: ""
             it[activo] = product.isActive
             it[precio] = product.cost?: 0.0
         }

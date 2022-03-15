@@ -8,7 +8,8 @@ data class User(
     val email: String,
     val nombre: String,
     val rol: String,
-    val empresa: String
+    val empresa: String,
+    val carrito: String?=null
 ): Parcelable{}
 
 data class UserBody(
