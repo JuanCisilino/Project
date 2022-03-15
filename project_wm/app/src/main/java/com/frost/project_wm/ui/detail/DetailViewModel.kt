@@ -15,6 +15,7 @@ class DetailViewModel: ViewModel() {
     var user: User?= null
     var product: Product?= null
     var userLiveData = MutableLiveData<User?>()
+    var userDeletedLiveData = MutableLiveData<User?>()
     var productLiveData = MutableLiveData<Product?>()
 
     fun changeRole(newRole: String) =
@@ -26,6 +27,16 @@ class DetailViewModel: ViewModel() {
                 userLiveData.postValue(it)
             },{
                 userLiveData.postValue(null)
+            })
+
+    fun removeUser(email: String) =
+        instance.removeUser(email)
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .subscribe({
+                userDeletedLiveData.postValue(user)
+            },{
+                userDeletedLiveData.postValue(null)
             })
 
 }

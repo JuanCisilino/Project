@@ -76,6 +76,12 @@ class DetailFragment : Fragment() {
 
     private fun subscribeToLiveData() {
         viewModel.userLiveData.observe(viewLifecycleOwner, Observer { handleUserLiveData(it) })
+        viewModel.userDeletedLiveData.observe(viewLifecycleOwner, Observer { handleUserDeletedLiveData(it) })
+    }
+
+    private fun handleUserDeletedLiveData(user: User?) {
+        user?.let { findNavController().popBackStack() }
+            ?:run { Toast.makeText(context, R.string.error_delete, Toast.LENGTH_SHORT).show() }
     }
 
     private fun handleUserLiveData(user: User?) {
@@ -89,7 +95,13 @@ class DetailFragment : Fragment() {
         binding.textEmail.text = user.email
         binding.textCompany.text = user.empresa
         binding.textRole.text = user.rol
-        binding.btn.setOnClickListener { validateAndChangeUser() }
+        binding.btnRole.setOnClickListener { validateAndChangeUser() }
+        binding.btnDelete.setOnClickListener { removeUser() }
+    }
+
+    private fun removeUser() {
+        val email = binding.textEmail.text.toString()
+        viewModel.removeUser(email)
     }
 
     private fun validateAndChangeUser() {

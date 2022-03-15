@@ -12,6 +12,7 @@ class AddEditViewModel: ViewModel() {
     private val instance = RepoInstance.getRetrofitInstance().create(ProductRepository::class.java)
     var productLiveData = MutableLiveData<Product?>()
     var newProductLiveData = MutableLiveData<Product?>()
+    var modifiedProductLiveData = MutableLiveData<Product?>()
     var imageString : String ?= null
     var productList : List<Product>?= null
 
@@ -39,4 +40,12 @@ class AddEditViewModel: ViewModel() {
             .subscribe(
                 { newProductLiveData.postValue(it) },
                 { newProductLiveData.postValue(null)})
+
+    fun updateProduct(product: Product) =
+        instance.updateProduct(product)
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .subscribe(
+                { modifiedProductLiveData.postValue(it) },
+                { modifiedProductLiveData.postValue(null)})
 }

@@ -52,13 +52,13 @@ class LoginViewModel: ViewModel() {
                 {userLiveData.postValue(null)})
 
     fun godLogin() =
-        instance.getByEmail("testing@test.com")
+        instance.getByEmail("test@testing.com")
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
             .subscribe(
                 {it.body?.let { userLiveData.postValue(it) }
                     ?:run {userLiveData.postValue(null)}},
-                {})
+                {userLiveData.postValue(null)})
 
     fun sessionLogin(email: String) =
         instance.getByEmail(email)

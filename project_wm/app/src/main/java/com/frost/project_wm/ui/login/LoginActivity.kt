@@ -46,20 +46,19 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun handleUser(user: User?) {
-        loadingDialog.dismiss()
         user?.let {
             viewModel.save(it)
             MainActivity.start(this)
             finish()
         }
             ?:run {
+                loadingDialog.dismiss()
                 Toast.makeText(this, getString(R.string.error_message), Toast.LENGTH_SHORT).show() }
     }
 
     private fun checkSession() {
         val email = viewModel.getData(getString(R.string.shared_pref_email))
         email?.let { if (it.isNotBlank()) {
-            loadingDialog.show(supportFragmentManager)
             viewModel.sessionLogin(it)
         } }
     }
@@ -87,7 +86,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
-    override fun onBackPressed() { }
+    override fun onBackPressed() { loadingDialog.dismiss() }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -98,6 +97,7 @@ class LoginActivity : AppCompatActivity() {
                 account?.let {
                     signInWithCredential(GoogleAuthProvider.getCredential(it.idToken, null))
                         .addOnCompleteListener {
+                            loadingDialog.show(supportFragmentManager)
                             account.email?.let { viewModel.getUserByEmail(it) }
                             Handler().postDelayed(Runnable {
                                 if (it.isSuccessful){
@@ -115,7 +115,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun validateAndContinue(account: GoogleSignInAccount) {
-        loadingDialog.show(supportFragmentManager)
         val newUser = User(
             email = account.email?:"",
             nombre = account.displayName?:"none",
