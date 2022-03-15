@@ -85,7 +85,8 @@ class AddEditFragment : Fragment() {
         binding.editTextDescription.hint = product.description
         binding.editTextAvailable.hint = product.stock.toString()
         binding.editTextCost.hint = product.cost.toString()
-        if (product.image != "") binding.ivAddimage.setImageBitmap(helper?.decode(product.image))
+        product.image?.let { if (it != "") binding.ivAddimage.setImageBitmap(helper.decode(it)) }
+
     }
 
     private fun setGalleryButton() {
@@ -114,6 +115,7 @@ class AddEditFragment : Fragment() {
             binding.editTextLabel.text.isNullOrBlank() -> binding.editTextLabel.hint = "Por favor ingrese texto"
             binding.editTextDescription.text.isNullOrBlank() -> binding.editTextDescription.hint = "Por favor ingrese texto"
             binding.editTextAvailable.text.isNullOrBlank() -> binding.editTextAvailable.hint = "Por favor ingrese texto"
+            binding.editTextType.text.isNullOrBlank() -> binding.editTextType.hint = "Por favor ingrese texto"
             binding.editTextCost.text.isNullOrBlank() -> binding.editTextCost.hint = "Por favor ingrese texto"
             viewModel.imageString == null -> Toast.makeText(context, "Por favor seleccione una imagen" , Toast.LENGTH_SHORT).show()
             else -> createAndSave()
@@ -127,12 +129,12 @@ class AddEditFragment : Fragment() {
             stock = binding.editTextAvailable.text.toString().toInt(),
             cost = binding.editTextCost.text.toString().toDouble(),
             company = getString(R.string.company_name),
-            id = viewModel.productList!!.size+1,
-            type = "Indefinido",
-            image = viewModel.imageString?:""
+            type = binding.editTextType.text.toString(),
+            image = viewModel.imageString?:"",
+            isActive = binding.checkBox.isChecked
         )
         viewModel.saveProduct(newProduct)
-        Log.d(newProduct.title, newProduct.image.length.toString())
+        Log.d(newProduct.title, newProduct.image?.length.toString())
         loadingDialog.show(parentFragmentManager)
     }
 

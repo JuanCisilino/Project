@@ -46,8 +46,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun handleUser(user: User?) {
+        loadingDialog.dismiss()
         user?.let {
-            loadingDialog.dismiss()
             viewModel.save(it)
             MainActivity.start(this)
             finish()

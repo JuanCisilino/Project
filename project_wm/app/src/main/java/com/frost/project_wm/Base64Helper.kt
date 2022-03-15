@@ -19,7 +19,7 @@ class Base64Helper(val context: Context) {
     //encode image to base64 string
     fun enconde(image: Bitmap): String{
         val baos = ByteArrayOutputStream()
-        image.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        image.compress(Bitmap.CompressFormat.JPEG, 20, baos)
         val imageBytes = baos.toByteArray()
         return Base64.encodeToString(imageBytes, Base64.DEFAULT)
     }

@@ -38,8 +38,7 @@ class ProductsAdapter: RecyclerView.Adapter<ProductsAdapter.MyViewHolder>() {
             view.descriptionLabel.text = product.description
             view.availableLabel.text = "Stock: ${product.stock}"
             view.costLabel.text = "$ ${product.cost}"
-            if (product.image == "") { }
-            else { view.iv_image.setImageBitmap(helper.decode(product.image)) }
+            product.image?.let { if (it != "") view.iv_image.setImageBitmap(helper.decode(it)) }
             view.setOnClickListener { onProductClickCallback?.invoke(product) }
         }
     }

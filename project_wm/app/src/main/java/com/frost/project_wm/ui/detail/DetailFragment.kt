@@ -54,13 +54,24 @@ class DetailFragment : Fragment() {
         binding.userLayout.visibility = View.GONE
 
         val role = UserPrefs(requireContext()).getString(getString(R.string.shared_pref_role))
-        if ( role == "admin") binding.textLabel.text = "ID: ${product.id} ${product.title}"
-        else binding.textLabel.text = product.title
+        if ( role == "admin") setIdAndCheckBox(product)
+        else hideIdAndCheckBox()
 
+        binding.textLabel.text = product.title
         binding.textDescription.text = product.description
         binding.textAvailable.text = "Stock: ${product.stock}"
         binding.textCost.text = "$ ${product.cost}"
-        binding.ivImage.setImageBitmap(helper.decode(product.image))
+        product.image?.let { if (it != "") binding.ivImage.setImageBitmap(helper.decode(it)) }
+    }
+
+    private fun hideIdAndCheckBox(){
+        binding.textId.visibility = View.GONE
+        binding.checkBox.visibility = View.GONE
+    }
+
+    private fun setIdAndCheckBox(product: Product){
+        binding.textId.text = "ID: ${product.id}"
+        binding.checkBox.isChecked = product.isActive
     }
 
     private fun subscribeToLiveData() {

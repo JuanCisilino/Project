@@ -27,6 +27,9 @@
     <string name="error_message_product">Se ha producido un error buscando al producto</string>
     <string name="error_save_product">Se ha producido un error guardando el producto</string>
     <string name="error">Error</string>
+    <string name="login_text">Seleccione su cuenta\npara ingresar:</string>
+    <string name="brand_text">Bienvenido a WhiteMark</string>
+    <string name="is_active_text">Activo</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
