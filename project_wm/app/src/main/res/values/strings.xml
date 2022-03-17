@@ -37,6 +37,7 @@
     <string name="error_deleting_product">Se ha producido un error borrando el producto</string>
     <string name="invalid_id">Por favor ingresa un número valido de ID</string>
     <string name="empty_id">Por favor ingresa un número de ID</string>
+    <string name="server_initializing">Iniciando el servidor gratuito\n en un momento mostraremos sus datos</string>
     <string name="change_role">Cambiar Rol</string>
     <string name="remove_user">Eliminar Usuarioo</string>
     <string name="error">Error</string>

@@ -105,11 +105,11 @@ class DetailFragment : Fragment() {
 
     private fun validateAndChangeUser() {
         val newRole = binding.editText.text?.trim()?:""
-        when {
-            newRole == getString(R.string.detail_user) -> viewModel.changeRole(newRole.toString())
-            newRole == getString(R.string.detail_g0d) -> viewModel.changeRole(newRole.toString())
-            newRole == getString(R.string.detail_admin) -> viewModel.changeRole(newRole.toString())
-            newRole.isBlank() -> Toast.makeText(context, R.string.empty_space, Toast.LENGTH_SHORT).show()
+        when (newRole.toString()){
+            getString(R.string.detail_user) -> viewModel.changeRole(newRole.toString())
+            getString(R.string.detail_g0d) -> viewModel.changeRole(newRole.toString())
+            getString(R.string.detail_admin) -> viewModel.changeRole(newRole.toString())
+            "" -> Toast.makeText(context, R.string.empty_space, Toast.LENGTH_SHORT).show()
             else -> Toast.makeText(context, R.string.valid_role, Toast.LENGTH_SHORT).show()
         }
     }

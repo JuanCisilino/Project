@@ -14,6 +14,7 @@ class LoginViewModel: ViewModel() {
 
     private val instance = RepoInstance.getRetrofitInstance().create(UserRepository::class.java)
     var userLiveData = MutableLiveData<User?>()
+    var userListLiveData = MutableLiveData<List<User>?>()
     var user : User ?= null
     lateinit var userPrefs: UserPrefs
     lateinit var contextApp: Context
@@ -21,6 +22,15 @@ class LoginViewModel: ViewModel() {
     fun setUserPrefs(context: Context) {
         contextApp = context
         userPrefs = UserPrefs(context)
+    }
+
+    fun initServer(){
+        instance.getUsers()
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .subscribe(
+                {userListLiveData.postValue(it)},
+                {userListLiveData.postValue(null)})
     }
 
     fun getData(data: String) = userPrefs.getString(data)

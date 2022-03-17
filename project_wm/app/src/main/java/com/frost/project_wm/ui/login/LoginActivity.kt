@@ -26,7 +26,9 @@ class LoginActivity : AppCompatActivity() {
     private val viewModel by lazy { ViewModelProvider(this)[LoginViewModel::class.java] }
     private lateinit var binding: ActivityLoginBinding
     private val GOOGLE_SIGN_IN = 100
-    private val loadingDialog = LoadingDialog(R.string.loading_message)
+    private var loadingDialog = LoadingDialog(R.string.loading_message)
+    private var initializingDialog = LoadingDialog(R.string.server_initializing)
+    private var firstRun = true
 
     companion object{
         fun start(activity: Activity){
@@ -35,32 +37,45 @@ class LoginActivity : AppCompatActivity() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.initServer()
         setBinding()
-        checkSession()
         setBtns()
         subscribeToLiveData()
     }
 
     private fun subscribeToLiveData() {
         viewModel.userLiveData.observe(this, Observer { handleUser(it) })
+        viewModel.userListLiveData.observe(this, Observer { handleUserList(it) })
+    }
+
+    private fun handleUserList(userList: List<User>?) {
+        userList?.let { checkSession() }
+            ?:run { loadingServerDialog() }
     }
 
     private fun handleUser(user: User?) {
         user?.let {
+            firstRun = false
             viewModel.save(it)
             MainActivity.start(this)
             finish()
         }
-            ?:run {
+            ?: run {
                 loadingDialog.dismiss()
-                Toast.makeText(this, getString(R.string.error_message), Toast.LENGTH_SHORT).show() }
+                Toast.makeText(this, getString(R.string.error_message), Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun loadingServerDialog() {
+        initializingDialog.show(supportFragmentManager)
+        firstRun = false
+        Handler().postDelayed( { viewModel.initServer() }, 3000)
     }
 
     private fun checkSession() {
+        if (!firstRun) initializingDialog.dismiss()
         val email = viewModel.getData(getString(R.string.shared_pref_email))
-        email?.let { if (it.isNotBlank()) {
-            viewModel.sessionLogin(it)
-        } }
+        email?.let { if (it.isNotBlank()) viewModel.sessionLogin(it) }
     }
 
     private fun setBtns() {
@@ -105,7 +120,7 @@ class LoginActivity : AppCompatActivity() {
                                 }else {
                                     showAlert()
                                 }
-                            }, 1000)
+                            }, 2000)
                         }
                 }
             }catch (e: ApiException){
