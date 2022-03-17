@@ -18,6 +18,7 @@
     <string name="error_modify">No se pudo modificar el usuario. Intente nuevamente más tarde</string>
     <string name="error_delete">No se pudo eliminar el usuario. Intente nuevamente más tarde</string>
     <string name="empty_space">Debe ingresar algún dato para continuar</string>
+    <string name="valid_role">Debe ingresar algún rol válido para continuar</string>
     <string name="prefs_file">com.frost.project_wm.PREFERENCE_FILE_KEY</string>
     <string name="shared_pref_name">Nombre</string>
     <string name="shared_pref_email">Email</string>
@@ -33,6 +34,9 @@
     <string name="error_message_product">Se ha producido un error buscando al producto</string>
     <string name="error_save_product">Se ha producido un error guardando el producto</string>
     <string name="error_modifing_product">Se ha producido un error modificando el producto</string>
+    <string name="error_deleting_product">Se ha producido un error borrando el producto</string>
+    <string name="invalid_id">Por favor ingresa un número valido de ID</string>
+    <string name="empty_id">Por favor ingresa un número de ID</string>
     <string name="change_role">Cambiar Rol</string>
     <string name="remove_user">Eliminar Usuarioo</string>
     <string name="error">Error</string>

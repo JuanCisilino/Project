@@ -3,6 +3,7 @@ package com.frost.project_wm.network
 import com.frost.project_wm.model.Product
 import com.frost.project_wm.model.ProductBody
 import retrofit2.http.*
+import rx.Completable
 import rx.Observable
 
 interface ProductRepository {
@@ -21,4 +22,7 @@ interface ProductRepository {
 
     @PATCH("products")
     fun updateProduct(@Body product: Product): Observable<Product>
+
+    @DELETE("products/{id}")
+    fun deleteProduct(@Path("id") id: Int): Completable
 }

@@ -28,6 +28,7 @@ class AdminFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.getList()
         initBtns()
     }
 
@@ -53,9 +54,13 @@ class AdminFragment : Fragment() {
     private fun validateAndNavigate() {
         if (!binding.editTextId.text.isNullOrBlank()){
             val id = binding.editTextId.text.toString()
-            navigate(id)
+            var existingProduct : Product?= null
+            viewModel.productList.value?.let { existingProduct = it.find { product -> product.id == id.toInt() } }
+            existingProduct
+                ?.let { navigate(it.id.toString()) }
+                ?:run { Toast.makeText(context, getString(R.string.invalid_id), Toast.LENGTH_SHORT).show() }
         } else {
-            Toast.makeText(context, "Por favor ingresa un numero valido de ID", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.empty_id), Toast.LENGTH_SHORT).show()
         }
     }
 

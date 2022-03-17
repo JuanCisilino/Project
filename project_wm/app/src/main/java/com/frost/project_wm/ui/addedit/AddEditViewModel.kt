@@ -13,15 +13,8 @@ class AddEditViewModel: ViewModel() {
     var productLiveData = MutableLiveData<Product?>()
     var newProductLiveData = MutableLiveData<Product?>()
     var modifiedProductLiveData = MutableLiveData<Product?>()
+    var deletedProductLiveData = MutableLiveData<Product?>()
     var imageString : String ?= null
-    var productList : List<Product>?= null
-
-    fun getList() = instance.getProducts()
-        .subscribeOn(Schedulers.io())
-        .observeOn(Schedulers.io())
-        .subscribe(
-            { productList = it },
-            { })
 
     fun findById(id: Int) =
         instance.getProdById(id)
@@ -48,4 +41,13 @@ class AddEditViewModel: ViewModel() {
             .subscribe(
                 { modifiedProductLiveData.postValue(it) },
                 { modifiedProductLiveData.postValue(null)})
+
+    fun deleteProduct(id: Int) =
+        instance.deleteProduct(id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .subscribe(
+                { deletedProductLiveData.postValue(productLiveData.value) },
+                { deletedProductLiveData.postValue(null) }
+            )
 }

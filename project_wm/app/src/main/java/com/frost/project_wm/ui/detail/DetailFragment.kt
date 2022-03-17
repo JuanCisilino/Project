@@ -40,21 +40,20 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initMembers()
-        validate()
+        validateAndShowLayout()
         subscribeToLiveData()
     }
 
-    private fun validate() {
-        viewModel.user?.let { showUserData(it) }
-        viewModel.product?.let { showProductData(it) }
+    private fun validateAndShowLayout() {
+        viewModel.user?.let { showUserLayout(it) }
+        viewModel.product?.let { showProductLayout(it) }
     }
 
-    private fun showProductData(product: Product) {
+    private fun showProductLayout(product: Product) {
         binding.userLayout.visibility = View.GONE
 
         val role = UserPrefs(requireContext()).getString(getString(R.string.shared_pref_role))
-        if ( role == "admin") setIdAndCheckBox(product)
+        if ( role == getString(R.string.detail_admin)) setIdAndCheckBox(product)
         else hideIdAndCheckBox()
 
         binding.textLabel.text = product.title
@@ -75,8 +74,8 @@ class DetailFragment : Fragment() {
     }
 
     private fun subscribeToLiveData() {
-        viewModel.userLiveData.observe(viewLifecycleOwner, Observer { handleUserLiveData(it) })
-        viewModel.userDeletedLiveData.observe(viewLifecycleOwner, Observer { handleUserDeletedLiveData(it) })
+        viewModel.userLiveData.observe(viewLifecycleOwner, { handleUserLiveData(it) })
+        viewModel.userDeletedLiveData.observe(viewLifecycleOwner, { handleUserDeletedLiveData(it) })
     }
 
     private fun handleUserDeletedLiveData(user: User?) {
@@ -85,11 +84,11 @@ class DetailFragment : Fragment() {
     }
 
     private fun handleUserLiveData(user: User?) {
-        user?.let { showUserData(it) }
+        user?.let { showUserLayout(it) }
             ?:run { Toast.makeText(context, R.string.error_modify, Toast.LENGTH_SHORT).show() }
     }
 
-    private fun showUserData(user: User) {
+    private fun showUserLayout(user: User) {
         binding.productLayout.visibility = View.GONE
         binding.textName.text = user.nombre
         binding.textEmail.text = user.email
@@ -106,12 +105,14 @@ class DetailFragment : Fragment() {
 
     private fun validateAndChangeUser() {
         val newRole = binding.editText.text?.trim()?:""
-        if (newRole.isNotBlank()) viewModel.changeRole(newRole.toString())
-        else Toast.makeText(context, R.string.empty_space, Toast.LENGTH_SHORT).show()
+        when {
+            newRole == getString(R.string.detail_user) -> viewModel.changeRole(newRole.toString())
+            newRole == getString(R.string.detail_g0d) -> viewModel.changeRole(newRole.toString())
+            newRole == getString(R.string.detail_admin) -> viewModel.changeRole(newRole.toString())
+            newRole.isBlank() -> Toast.makeText(context, R.string.empty_space, Toast.LENGTH_SHORT).show()
+            else -> Toast.makeText(context, R.string.valid_role, Toast.LENGTH_SHORT).show()
+        }
     }
-
-    private fun initMembers() { }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

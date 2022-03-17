@@ -30,7 +30,7 @@ class AddEditFragment : Fragment() {
     private fun getLabel(){
         requireArguments().let {
                 when {
-                    it.getString(getString(R.string.title_add)) == getString(R.string.title_add) -> { viewModel.getList() }
+                    it.getString(getString(R.string.title_add)) == getString(R.string.title_add) -> { setupAdd() }
                     else -> {
                         val id = it.getString(getString(R.string.title_edit))
                         loadingDialog.show(parentFragmentManager)
@@ -43,7 +43,6 @@ class AddEditFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View {
-        getLabel()
         _binding = FragmentAddeditBinding.inflate(inflater, container, false)
         context?.let { helper = Base64Helper(it) }
         return binding.root
@@ -51,6 +50,7 @@ class AddEditFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getLabel()
         setButtons()
         subscribeToLiveData()
     }
@@ -58,16 +58,31 @@ class AddEditFragment : Fragment() {
     private fun setButtons() {
         binding.btnPic.setOnClickListener { setCaptureButton() }
         binding.btnGallery.setOnClickListener { setGalleryButton() }
-        binding.btnAdd.text = viewModel.productList
-            ?.let { getString(R.string.btn_add_message) }
-            ?:run { getString(R.string.btn_modify_message) }
         binding.btnAdd.setOnClickListener { validateAndSave() }
+        binding.btnRemove.setOnClickListener { deleteProduct() }
+    }
+
+    private fun setupAdd(): String{
+        binding.btnRemove.visibility = View.GONE
+        return getString(R.string.btn_add_message)
+    }
+
+    private fun deleteProduct(){
+        viewModel.productLiveData.value?.id?.let { viewModel.deleteProduct(it) }
+        loadingDialog.show(parentFragmentManager)
     }
 
     private fun subscribeToLiveData() {
         viewModel.productLiveData.observe(viewLifecycleOwner, { handleProduct(it) })
         viewModel.newProductLiveData.observe(viewLifecycleOwner, { handleNewProduct(it) })
         viewModel.modifiedProductLiveData.observe(viewLifecycleOwner, { handleModifiedProduct(it) })
+        viewModel.deletedProductLiveData.observe(viewLifecycleOwner, { handleDeletedProduct(it) })
+    }
+
+    private fun handleDeletedProduct(product: Product?) {
+        loadingDialog.dismiss()
+        product?.let { findNavController().popBackStack() }
+            ?:run { Toast.makeText(context, getString(R.string.error_deleting_product), Toast.LENGTH_SHORT).show() }
     }
 
     private fun handleModifiedProduct(modifiedProduct: Product?) {
@@ -97,6 +112,7 @@ class AddEditFragment : Fragment() {
         binding.editTextCost.hint = product.cost.toString()
         binding.editTextType.hint = product.type.toString()
         binding.checkBox.isChecked = product.isActive
+        binding.btnAdd.text = getString(R.string.btn_modify_message)
         product.image?.let { if (it != "") binding.ivAddimage.setImageBitmap(helper.decode(it)) }
     }
 
