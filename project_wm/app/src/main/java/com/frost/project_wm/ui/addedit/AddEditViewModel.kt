@@ -1,5 +1,6 @@
 package com.frost.project_wm.ui.addedit
 
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.frost.project_wm.model.Product
@@ -15,6 +16,7 @@ class AddEditViewModel: ViewModel() {
     var modifiedProductLiveData = MutableLiveData<Product?>()
     var deletedProductLiveData = MutableLiveData<Product?>()
     var imageString : String ?= null
+    var imageUri : Uri?= null
 
     fun findById(id: Int) =
         instance.getProdById(id)

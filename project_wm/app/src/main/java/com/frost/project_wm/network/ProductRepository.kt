@@ -25,4 +25,6 @@ interface ProductRepository {
 
     @DELETE("products/{id}")
     fun deleteProduct(@Path("id") id: Int): Completable
+
+
 }

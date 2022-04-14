@@ -57,7 +57,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun handleLiveData(list: List<Product>?) {
-        list?.let { adapter.setList(it) }
+        list?.let { context?.let { context -> adapter.setList(it, context) } }
             ?:run { Toast.makeText(context, getString(R.string.error_list), Toast.LENGTH_LONG).show()}
     }
 
