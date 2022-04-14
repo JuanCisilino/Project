@@ -1,6 +1,8 @@
 package com.frost.project_wm.ui.profile
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.provider.Settings
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -78,11 +80,12 @@ class ProfileFragment : Fragment() {
         setData()
     }
 
+    @SuppressLint("HardwareIds")
     private fun setData() {
         binding.godLayout.visibility = View.GONE
         binding.textName.text = viewModel.getData(getString(R.string.shared_pref_name))
         binding.textEmail.text = viewModel.getData(getString(R.string.shared_pref_email))
-        binding.textVersion.text = getString(R.string.version_app)
+        binding.textVersion.text = Settings.Secure.getString(activity?.contentResolver, Settings.Secure.ANDROID_ID)
     }
 
     private fun showGodLayout() {

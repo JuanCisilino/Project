@@ -10,11 +10,14 @@ import androidx.lifecycle.ViewModelProvider
 import com.frost.project_wm.databinding.FragmentDetailBinding
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.frost.project_wm.Base64Helper
 import com.frost.project_wm.R
 import com.frost.project_wm.UserPrefs
 import com.frost.project_wm.model.Product
 import com.frost.project_wm.model.User
+import kotlinx.android.synthetic.main.item_product.view.*
 
 class DetailFragment : Fragment() {
 
@@ -60,7 +63,22 @@ class DetailFragment : Fragment() {
         binding.textDescription.text = product.description
         binding.textAvailable.text = "Stock: ${product.stock}"
         binding.textCost.text = "$ ${product.cost}"
-        product.image?.let { if (it != "") binding.ivImage.setImageBitmap(helper.decode(it)) }
+        product.image?.let {
+            if (it.length < 800)
+                glideIt(it)
+            else
+                view?.iv_image?.setImageBitmap(helper.decode(it))
+        }
+    }
+
+    private fun glideIt(url: String) {
+        context?.let {
+            Glide.with(it)
+                .load(url)
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(binding.ivImage)
+        }
     }
 
     private fun hideIdAndCheckBox(){

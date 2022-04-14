@@ -10,7 +10,7 @@ data class Product(
     val description: String,
     val cost: Double,
     val stock: Int,
-    val image: String?,
+    var image: String?,
     val company: String,
     val isActive: Boolean,
     val type: String

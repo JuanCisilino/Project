@@ -1,10 +1,12 @@
 package com.frost.project_wm.ui.addedit
 
+import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,11 +15,20 @@ import android.widget.Toast
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.frost.project_wm.Base64Helper
 import com.frost.project_wm.R
 import com.frost.project_wm.databinding.FragmentAddeditBinding
 import com.frost.project_wm.model.Product
 import com.frost.project_wm.ui.dialog.LoadingDialog
+import android.webkit.MimeTypeMap
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import kotlinx.android.synthetic.main.item_product.view.*
+import java.io.File
+import java.net.URI
+
 
 class AddEditFragment : Fragment() {
 
@@ -26,6 +37,7 @@ class AddEditFragment : Fragment() {
     private val loadingDialog = LoadingDialog(R.string.loading_message)
     private val binding get() = _binding!!
     private lateinit var helper: Base64Helper
+    private lateinit var storage: StorageReference
 
     private fun getLabel(){
         requireArguments().let {
@@ -45,6 +57,7 @@ class AddEditFragment : Fragment() {
         savedInstanceState: Bundle?): View {
         _binding = FragmentAddeditBinding.inflate(inflater, container, false)
         context?.let { helper = Base64Helper(it) }
+        storage = FirebaseStorage.getInstance().getReference("uploads")
         return binding.root
     }
 
@@ -92,10 +105,12 @@ class AddEditFragment : Fragment() {
     }
 
     private fun handleNewProduct(newProduct: Product?) {
-        loadingDialog.dismiss()
         newProduct
-            ?.let { findNavController().popBackStack() }
-            ?:run { Toast.makeText(context, getString(R.string.error_save_product), Toast.LENGTH_SHORT).show()}
+            ?.let { createUrl(it) }
+            ?:run {
+                loadingDialog.dismiss()
+                Toast.makeText(context, getString(R.string.error_save_product), Toast.LENGTH_SHORT).show()
+            }
     }
 
     private fun handleProduct(product: Product?) {
@@ -113,7 +128,12 @@ class AddEditFragment : Fragment() {
         binding.editTextType.hint = product.type.toString()
         binding.checkBox.isChecked = product.isActive
         binding.btnAdd.text = getString(R.string.btn_modify_message)
-        product.image?.let { if (it != "") binding.ivAddimage.setImageBitmap(helper.decode(it)) }
+        product.image?.let {
+            if (it.length < 800)
+                glideIt(it)
+            else
+                view?.iv_image?.setImageBitmap(helper.decode(it))
+        }
     }
 
     private fun setGalleryButton() {
@@ -180,6 +200,27 @@ class AddEditFragment : Fragment() {
         loadingDialog.show(parentFragmentManager)
     }
 
+    private fun createUrl(product: Product) {
+        val bitmap = viewModel.imageString?.let { helper.decode(it) }
+        val uri = bitmap?.let { helper.bitmapToUri(it,product.id.toString()) }
+        uri?.let { uri ->
+            val reference = storage.child("${product.id}")
+            val uploadTask = reference.putFile(uri)
+            uploadTask.continueWithTask { task ->
+                if (!task.isSuccessful) task.exception?.let { throw it }
+                reference.downloadUrl
+            }.addOnCompleteListener { task ->
+                loadingDialog.dismiss()
+                if (task.isSuccessful) {
+                    product.image = task.result.toString()
+                    checkEditProduct(product)
+                } else {
+                    Toast.makeText(context, "Ups!!\n Vuelve a intentar en un ratito.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when(requestCode){
@@ -191,6 +232,16 @@ class AddEditFragment : Fragment() {
                 val bitmap = helper.uriToBitmap(data?.data!!)
                 viewModel.imageString = bitmap?.let { helper.enconde(it) }
                 binding.ivAddimage.setImageURI(data.data) }
+        }
+    }
+
+    private fun glideIt(url: String) {
+        context?.let {
+            Glide.with(it)
+                .load(url)
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(binding.ivAddimage)
         }
     }
 

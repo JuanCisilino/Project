@@ -11,7 +11,10 @@ import android.os.Build
 
 import android.content.ContentResolver
 import android.graphics.ImageDecoder
+import androidx.core.net.toUri
+import java.io.File
 import java.lang.Exception
+import java.net.URI
 
 
 class Base64Helper(val context: Context) {
@@ -19,7 +22,7 @@ class Base64Helper(val context: Context) {
     //encode image to base64 string
     fun enconde(image: Bitmap): String{
         val baos = ByteArrayOutputStream()
-        image.compress(Bitmap.CompressFormat.JPEG, 20, baos)
+        image.compress(Bitmap.CompressFormat.PNG, 100, baos)
         val imageBytes = baos.toByteArray()
         return Base64.encodeToString(imageBytes, Base64.DEFAULT)
     }
@@ -46,5 +49,22 @@ class Base64Helper(val context: Context) {
             e.printStackTrace()
         }
         return bitmap
+    }
+
+    //turn bitmap into uri
+    fun bitmapToUri(bitmap: Bitmap, name: String): Uri {
+
+        val file = File(context.cacheDir,name) //Get Access to a local file.
+        file.delete() // Delete the File, just in Case, that there was still another File
+        file.createNewFile()
+        val fileOutputStream = file.outputStream()
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream)
+        val bytearray = byteArrayOutputStream.toByteArray()
+        fileOutputStream.write(bytearray)
+        fileOutputStream.flush()
+        fileOutputStream.close()
+        byteArrayOutputStream.close()
+        return file.toUri()
     }
 }
