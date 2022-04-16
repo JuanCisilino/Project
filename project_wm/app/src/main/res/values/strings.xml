@@ -14,6 +14,7 @@
     <string name="detail_user">user</string>
     <string name="detail_admin">admin</string>
     <string name="detail_g0d">g0d</string>
+    <string name="deleted_success">Se ha limpiado el storage de imagenes sin dueño:</string>
     <string name="error_list">No se pudo conseguir la lista. Intente nuevamente más tarde</string>
     <string name="error_modify">No se pudo modificar el usuario. Intente nuevamente más tarde</string>
     <string name="error_delete">No se pudo eliminar el usuario. Intente nuevamente más tarde</string>

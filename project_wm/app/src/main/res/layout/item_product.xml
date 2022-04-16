@@ -18,11 +18,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <com.google.android.material.textview.MaterialTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/nameLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
+        android:textColor="@color/black"
         android:padding="5dp"
         android:textSize="12sp"
         android:singleLine="true"
@@ -40,7 +41,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/nameLabel"/>
 
-    <com.google.android.material.textview.MaterialTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/descriptionLabel"
         android:textSize="10sp"
         android:textStyle="italic"
@@ -48,6 +49,7 @@
         android:layout_marginTop="3dp"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
+        android:textColor="@color/black"
         android:maxLines="2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,7 +57,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/div" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/availableLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -64,6 +66,7 @@
         android:textSize="8sp"
         android:textAlignment="center"
         android:textStyle="bold"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/descriptionLabel"/>
@@ -77,11 +80,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/availableLabel"/>
 
-    <com.google.android.material.textview.MaterialTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/costLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Cost"
+        android:textColor="@color/black"
         android:layout_marginTop="3dp"
         android:textAlignment="center"
         android:textSize="10sp"

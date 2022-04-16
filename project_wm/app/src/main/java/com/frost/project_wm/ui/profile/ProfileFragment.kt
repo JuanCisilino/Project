@@ -14,15 +14,22 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.frost.project_wm.R
 import com.frost.project_wm.databinding.FragmentProfileBinding
 import com.frost.project_wm.logOut
+import com.frost.project_wm.model.Product
 import com.frost.project_wm.model.User
 import com.frost.project_wm.ui.adapters.UsersAdapter
+import com.frost.project_wm.ui.dialog.LoadingDialog
 import com.frost.project_wm.ui.login.LoginActivity
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import kotlinx.android.synthetic.main.fragment_profile.*
 
 class ProfileFragment : Fragment() {
 
     private val viewModel by lazy { ViewModelProvider(this)[ProfileViewModel::class.java] }
     private var _binding: FragmentProfileBinding? = null
+    private val loadingDialog = LoadingDialog(R.string.loading_message)
     private lateinit var adapter : UsersAdapter
+    private lateinit var reference : StorageReference
 
     private val binding get() = _binding!!
 
@@ -34,6 +41,7 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        reference = FirebaseStorage.getInstance().getReference("uploads")
         context?.let { viewModel.setUserPrefs(it) }
         initMembers()
         setupRecycler()
@@ -47,6 +55,29 @@ class ProfileFragment : Fragment() {
 
     private fun subscribeToLiveData() {
         viewModel.userList.observe(viewLifecycleOwner, { handleLiveData(it) })
+        viewModel.productList.observe(viewLifecycleOwner, { handleProdList(it) })
+    }
+
+    private fun handleProdList(list: List<Product>?) {
+        list?.let { cleanStorage(it) }
+            ?:run { Toast.makeText(context, getString(R.string.error_list), Toast.LENGTH_LONG).show()}
+
+    }
+
+    private fun cleanStorage(list: List<Product>) {
+        var count = 0
+        reference.listAll().addOnSuccessListener {
+            it.items.forEach { item ->
+                if (list.any{it.id.toString() == item.name}) {
+                    // do Nothing
+                } else {
+                    count++
+                    item.delete()
+                }
+            }
+            Toast.makeText(context, "${getString(R.string.deleted_success)} $count", Toast.LENGTH_LONG).show()
+        }
+        loadingDialog.dismiss()
     }
 
     private fun handleLiveData(list: List<User>?) {
@@ -76,6 +107,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun showUserLayout() {
+        binding.cleanStorage.visibility = View.GONE
         binding.textCompany.visibility = View.GONE
         setData()
     }
@@ -93,9 +125,16 @@ class ProfileFragment : Fragment() {
         binding.ivImage.setImageResource(R.drawable.horus)
         viewModel.getList()
         binding.ivImage.setOnClickListener { logOut() }
+        binding.cleanStorage.setOnClickListener { getProductList() }
+    }
+
+    private fun getProductList(){
+        loadingDialog.show(parentFragmentManager)
+        viewModel.getProducts()
     }
 
     private fun showAdminLayout() {
+        binding.cleanStorage.visibility = View.GONE
         binding.textCompany.text = viewModel.getData(getString(R.string.shared_pref_company))
         setData()
     }

@@ -45,6 +45,7 @@ class AdminFragment : Fragment() {
                 findNavController().navigate(R.id.navigation_add, bundle)
             }
             else -> {
+                binding.editTextId.setText("")
                 bundle.putString(getString(R.string.title_edit), destination)
                 findNavController().navigate(R.id.navigation_add, bundle)
             }
