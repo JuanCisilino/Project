@@ -80,11 +80,11 @@ class ProductServiceImpl {
     private fun generateProduct(id: Int, product: ProductoLocal){
         Producto.insert {
             it[Producto.id] = id
-            it[titulo] = product.title ?: "none"
-            it[descripcion] = product.description ?: "none"
-            it[empresa] = product.company ?: "none"
+            it[titulo] = product.title ?: ""
+            it[descripcion] = product.description ?: ""
+            it[empresa] = product.company ?: ""
             it[stock] = product.stock
-            it[tipo] = product.type ?: "none"
+            it[tipo] = product.type ?: ""
             it[imagen] = product.image ?: ""
             it[activo] = product.isActive
             it[precio] = product.cost?: 0.0

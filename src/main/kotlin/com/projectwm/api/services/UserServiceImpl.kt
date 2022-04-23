@@ -48,10 +48,10 @@ class UserServiceImpl {
         transaction {
             Usuario.insert {
                 it[email] = user.email
-                it[nombre] = user.nombre ?: "Undefined"
+                it[nombre] = user.nombre ?: ""
                 it[rol] = user.rol ?: ""
                 it[carrito] = user.cart ?: ""
-                it[empresa] = user.empresa ?: "WM"
+                it[empresa] = user.empresa ?: "API"
             }
         }
         ResponseEntity(Usuario.getByEmail(user.email), HttpStatus.OK)

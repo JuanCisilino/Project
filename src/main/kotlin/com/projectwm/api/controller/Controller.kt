@@ -19,6 +19,7 @@ class Controller {
     private val userService = UserServiceImpl()
     private val productService = ProductServiceImpl()
 
+    @CrossOrigin("https://project-wm.herokuapp.com")
     @GetMapping("/users/{email}")
     @ResponseBody
     suspend fun getByEmail(@PathVariable email: String) =
